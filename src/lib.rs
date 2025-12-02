@@ -41,7 +41,6 @@
     unused_qualifications
 )]
 
-pub mod charms;
 pub mod core;
 pub mod error;
 pub mod liquidation;
