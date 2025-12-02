@@ -56,8 +56,8 @@ num-traits = "0.2"
 # Time
 chrono = { version = "0.4", features = ["serde"] }
 
-# Optional: SP1 zkVM support
-# sp1-zkvm = { version = "1.0", optional = true }
+# Optional: SP1 zkVM support (host-side SDK for proof generation)
+sp1-sdk = { version = "4.0", optional = true }
 
 # CLI
 clap = { version = "4.4", features = ["derive", "env"] }
@@ -85,8 +85,8 @@ default = ["std"]
 std = []
 async-oracle = ["tokio", "reqwest"]
 rpc-server = ["tokio", "axum", "tower", "tower-http"]
-full = ["async-oracle", "rpc-server"]
-# zkvm = ["sp1-zkvm"]
+sp1-prover = ["sp1-sdk", "tokio"]
+full = ["async-oracle", "rpc-server", "sp1-prover"]
 
 [profile.release]
 opt-level = 3

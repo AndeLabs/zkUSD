@@ -1,0 +1,41 @@
+[package]
+name = "zkusd-guest"
+version = "0.1.0"
+edition = "2021"
+description = "SP1 zkVM guest programs for zkUSD protocol"
+
+[workspace]
+
+[[bin]]
+name = "zkusd_deposit_v1"
+path = "src/deposit.rs"
+
+[[bin]]
+name = "zkusd_withdraw_v1"
+path = "src/withdraw.rs"
+
+[[bin]]
+name = "zkusd_mint_v1"
+path = "src/mint.rs"
+
+[[bin]]
+name = "zkusd_repay_v1"
+path = "src/repay.rs"
+
+[[bin]]
+name = "zkusd_liquidation_v1"
+path = "src/liquidation.rs"
+
+[[bin]]
+name = "zkusd_price_attestation_v1"
+path = "src/price_attestation.rs"
+
+[dependencies]
+sp1-zkvm = "4.0"
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+bincode = "1.3"
+sha2 = { version = "0.10", default-features = false }
+
+[profile.release]
+opt-level = 3
+lto = true
