@@ -14,7 +14,7 @@
 
 #[cfg(feature = "async-oracle")]
 use reqwest::Client;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::error::{Error, Result};
@@ -154,7 +154,7 @@ pub struct BybitTicker {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// Configuration for HTTP price fetcher
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HttpFetcherConfig {
     /// Timeout in milliseconds
     pub timeout_ms: u64,
