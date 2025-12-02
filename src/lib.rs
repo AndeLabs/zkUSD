@@ -49,6 +49,7 @@ pub mod protocol;
 pub mod spells;
 pub mod storage;
 pub mod utils;
+pub mod zkp;
 
 /// Prelude module for convenient imports
 pub mod prelude {
