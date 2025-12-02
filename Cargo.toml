@@ -59,6 +59,9 @@ chrono = { version = "0.4", features = ["serde"] }
 # Optional: SP1 zkVM support (host-side SDK for proof generation)
 sp1-sdk = { version = "4.0", optional = true }
 
+# Optional: RocksDB for production persistence
+rocksdb = { version = "0.22", optional = true }
+
 # CLI
 clap = { version = "4.4", features = ["derive", "env"] }
 dialoguer = "0.11"
@@ -86,7 +89,8 @@ std = []
 async-oracle = ["tokio", "reqwest"]
 rpc-server = ["tokio", "axum", "tower", "tower-http"]
 sp1-prover = ["sp1-sdk", "tokio"]
-full = ["async-oracle", "rpc-server", "sp1-prover"]
+rocksdb-storage = ["rocksdb"]
+full = ["async-oracle", "rpc-server", "sp1-prover", "rocksdb-storage"]
 
 [profile.release]
 opt-level = 3
