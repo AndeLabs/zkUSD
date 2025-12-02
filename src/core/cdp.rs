@@ -542,6 +542,11 @@ impl CDPManager {
         }
     }
 
+    /// Get all CDPs as a vector
+    pub fn all_cdps(&self) -> Vec<&CDP> {
+        self.cdps.values().collect()
+    }
+
     /// Get total number of CDPs
     pub fn total_count(&self) -> usize {
         self.cdps.len()

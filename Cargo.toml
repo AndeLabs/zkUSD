@@ -26,15 +26,24 @@ secp256k1 = { version = "0.28", features = ["serde", "rand-std", "hashes"] }
 rand = "0.8"
 hex = "0.4"
 
+# Bitcoin
+bitcoin = { version = "0.32", features = ["serde", "rand-std"] }
+miniscript = { version = "12", features = ["serde"] }
+
 # Error handling
 thiserror = "1.0"
 anyhow = "1.0"
 
-# Async runtime (for oracle)
+# Async runtime
 tokio = { version = "1.0", features = ["full"], optional = true }
 
 # HTTP client (for oracle price fetching)
 reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false, optional = true }
+
+# RPC Server
+axum = { version = "0.7", optional = true }
+tower = { version = "0.5", optional = true }
+tower-http = { version = "0.6", features = ["cors", "trace", "compression-gzip"], optional = true }
 
 # Logging
 tracing = "0.1"
@@ -47,8 +56,11 @@ num-traits = "0.2"
 # Time
 chrono = { version = "0.4", features = ["serde"] }
 
-# Optional: SP1 zkVM support
-# sp1-zkvm = { version = "1.0", optional = true }
+# Optional: SP1 zkVM support (host-side SDK for proof generation)
+sp1-sdk = { version = "4.0", optional = true }
+
+# Optional: RocksDB for production persistence
+rocksdb = { version = "0.22", optional = true }
 
 # CLI
 clap = { version = "4.4", features = ["derive", "env"] }
@@ -66,11 +78,19 @@ tempfile = "3.10"
 name = "zkusd"
 path = "src/bin/zkusd.rs"
 
+[[bin]]
+name = "zkusd-server"
+path = "src/bin/server.rs"
+required-features = ["rpc-server"]
+
 [features]
 default = ["std"]
 std = []
 async-oracle = ["tokio", "reqwest"]
-# zkvm = ["sp1-zkvm"]
+rpc-server = ["tokio", "axum", "tower", "tower-http"]
+sp1-prover = ["sp1-sdk", "tokio"]
+rocksdb-storage = ["rocksdb"]
+full = ["async-oracle", "rpc-server", "sp1-prover", "rocksdb-storage"]
 
 [profile.release]
 opt-level = 3

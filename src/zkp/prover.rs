@@ -387,8 +387,17 @@ impl ProverManager {
     pub fn new(backend: ProverBackend) -> Self {
         let prover: Box<dyn Prover> = match backend {
             ProverBackend::Native => Box::new(NativeProver::new()),
-            // Other backends would be initialized here
-            _ => Box::new(NativeProver::new()), // Fallback to native
+            #[cfg(feature = "sp1-prover")]
+            ProverBackend::SP1 => {
+                use crate::zkp::sp1_prover::{SP1Prover, SP1ProverConfig};
+                let config = SP1ProverConfig::default();
+                match SP1Prover::new(config) {
+                    Ok(prover) => Box::new(prover),
+                    Err(_) => Box::new(NativeProver::new()), // Fallback
+                }
+            }
+            // Other backends fallback to native
+            _ => Box::new(NativeProver::new()),
         };
 
         Self {
@@ -396,6 +405,19 @@ impl ProverManager {
             cache: Some(ProofCache::new(1000)),
             stats: ProverStats::default(),
         }
+    }
+
+    /// Create manager with SP1 and custom config
+    #[cfg(feature = "sp1-prover")]
+    pub fn with_sp1_config(config: crate::zkp::sp1_prover::SP1ProverConfig) -> Result<Self> {
+        use crate::zkp::sp1_prover::SP1Prover;
+        let prover = SP1Prover::new(config)?;
+
+        Ok(Self {
+            prover: Box::new(prover),
+            cache: Some(ProofCache::new(1000)),
+            stats: ProverStats::default(),
+        })
     }
 
     /// Create manager with specific prover
