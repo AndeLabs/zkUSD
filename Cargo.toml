@@ -26,6 +26,10 @@ secp256k1 = { version = "0.28", features = ["serde", "rand-std", "hashes"] }
 rand = "0.8"
 hex = "0.4"
 
+# Bitcoin
+bitcoin = { version = "0.32", features = ["serde", "rand-std"] }
+miniscript = { version = "12", features = ["serde"] }
+
 # Error handling
 thiserror = "1.0"
 anyhow = "1.0"

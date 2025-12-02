@@ -41,6 +41,7 @@
     unused_qualifications
 )]
 
+pub mod btc;
 pub mod charms;
 pub mod core;
 pub mod error;
