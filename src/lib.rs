@@ -45,7 +45,9 @@ pub mod core;
 pub mod error;
 pub mod liquidation;
 pub mod oracle;
+pub mod protocol;
 pub mod spells;
+pub mod storage;
 pub mod utils;
 
 /// Prelude module for convenient imports
