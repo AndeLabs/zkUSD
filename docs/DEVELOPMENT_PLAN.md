@@ -142,43 +142,40 @@
 
 ## Pending Features
 
-### 10. Recovery Mode (Phase 3) 🔲
+### 10. Recovery Mode (Phase 3) ✅
 
 When Total Collateral Ratio (TCR) < 150%, the protocol enters recovery mode with special rules:
 
-**Implementation Plan:**
-1. Add recovery mode detection to state machine
-2. Implement special liquidation rules:
-   - Allow liquidation of CDPs < 150% (not just < 110%)
-   - Limit debt minting to improve TCR
-3. Add TCR calculation and monitoring
-4. Create recovery mode exit conditions
+**Implementation:**
+- RecoveryModeManager with TCR calculations and validations
+- RecoveryModeStatus for detailed system status reporting
+- Operation validation (mint, withdrawal, CDP opening)
+- SortedCDPs for efficient CDP ordering by ratio
+- At-risk metrics calculation (CDPs and debt at risk)
+- Recovery mode event history tracking
+- Integration with ProtocolStateMachine
 
-**Files to modify:**
-- `src/protocol/state_machine.rs`
-- `src/liquidation/engine.rs`
-- `src/core/cdp.rs`
+**Files:**
+- `src/liquidation/recovery.rs`
+- `src/protocol/state_machine.rs` (integrated)
 
-### 11. Event Indexing System (Phase 3) 🔲
+### 11. Event Indexing System (Phase 3) ✅
 
 System for tracking and indexing protocol events for blockchain explorers and analytics.
 
-**Implementation Plan:**
-1. Define event types:
-   - CDPOpened, CDPClosed, CDPLiquidated
-   - CollateralDeposited, CollateralWithdrawn
-   - DebtMinted, DebtRepaid
-   - StabilityPoolDeposit, StabilityPoolWithdraw
-   - Liquidation, Redemption
-2. Create event emitter trait
-3. Implement event storage (append-only log)
-4. Add event querying API
+**Implementation:**
+- All event types defined (CDPOpened, CollateralDeposited, etc.)
+- In-memory event store with indexes (by block, type, CDP, account)
+- Persistent RocksDB storage (optional, with feature flag)
+- Event querying API with filters and pagination
+- Real-time subscription system (with async-oracle feature)
+- Event statistics and monitoring
 
-**New files:**
-- `src/events/mod.rs`
-- `src/events/types.rs`
-- `src/events/emitter.rs`
-- `src/events/storage.rs`
+**Files:**
+- `src/protocol/events.rs` (event types)
+- `src/events/mod.rs` (module root)
+- `src/events/storage.rs` (storage backends)
+- `src/events/indexer.rs` (main indexer API)
 
 ---
 

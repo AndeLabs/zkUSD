@@ -239,6 +239,14 @@ pub enum Error {
     /// Internal error (should not happen in production)
     #[error("Internal error: {0}")]
     Internal(String),
+
+    /// Lock acquisition failed
+    #[error("Failed to acquire lock")]
+    Lock,
+
+    /// Storage error
+    #[error("Storage error: {0}")]
+    Storage(String),
 }
 
 impl Error {
@@ -314,6 +322,8 @@ impl Error {
 
             // Internal errors: 9xxx
             Error::Internal(_) => 9001,
+            Error::Lock => 9002,
+            Error::Storage(_) => 9003,
         }
     }
 }
