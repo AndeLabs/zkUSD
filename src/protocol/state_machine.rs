@@ -11,6 +11,7 @@ use crate::core::config::ProtocolConfig;
 use crate::core::token::{TokenAmount, ZkUSD};
 use crate::core::vault::{CollateralAmount, Vault};
 use crate::error::{Error, Result};
+use crate::liquidation::recovery::{RecoveryModeManager, RecoveryModeStatus};
 use crate::liquidation::stability_pool::StabilityPool;
 use crate::protocol::events::*;
 use crate::protocol::operations::*;
@@ -1041,6 +1042,19 @@ impl<B: StorageBackend> ProtocolStateMachine<B> {
     /// Get total collateral
     pub fn total_collateral(&self) -> CollateralAmount {
         self.vault.total_collateral()
+    }
+
+    /// Get detailed recovery mode status
+    pub fn recovery_status(&self) -> RecoveryModeStatus {
+        let manager = RecoveryModeManager::new();
+        manager.get_status(
+            &self.cdp_manager,
+            self.vault.total_collateral().sats(),
+            self.total_debt(),
+            self.current_price,
+            self.timestamp,
+            self.block_height,
+        )
     }
 }
 
