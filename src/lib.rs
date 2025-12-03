@@ -46,6 +46,7 @@ pub mod charms;
 pub mod core;
 pub mod error;
 pub mod events;
+pub mod governance;
 pub mod liquidation;
 pub mod oracle;
 pub mod protocol;
