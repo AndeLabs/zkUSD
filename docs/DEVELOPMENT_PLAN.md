@@ -319,6 +319,78 @@ Comprehensive protocol monitoring with alerting and health scoring.
 
 ---
 
+### 17. CLI Tools (Phase 5) ✅
+
+Command-line interface for protocol operators.
+
+**Commands:**
+- `status` - Protocol overview, health, metrics, alerts
+- `cdp` - List, get, find risky/liquidatable CDPs, calculate ratios
+- `oracle` - Price, sources, history, health
+- `pool` - Stability pool status, depositors, gains
+- `governance` - Proposals, voting power, parameters
+- `config` - Show, set, validate configuration
+- `backup` - Create, restore, list, verify backups
+- `monitor` - Dashboard, watch metrics, export, alert rules
+
+**Output Formats:**
+- Text (human-readable with colors)
+- JSON / JSON-Pretty
+- Table
+- Minimal (values only)
+
+**Files:**
+- `src/cli/mod.rs` (app entry)
+- `src/cli/config.rs` (configuration)
+- `src/cli/output.rs` (formatters)
+- `src/cli/commands.rs` (all commands)
+
+---
+
+### 18. Circuit Breaker Pattern (Phase 5) ✅
+
+Fault tolerance for external dependencies.
+
+**Implementation:**
+- CircuitBreaker with Closed/Open/HalfOpen states
+- Configurable failure thresholds and success thresholds
+- Automatic timeout and recovery
+- CircuitBreakerRegistry for multiple services
+- Statistics tracking (success rate, failure rate, rejections)
+
+**Configuration Presets:**
+- Default: 5 failures to open, 3 successes to close, 30s timeout
+- Strict: 3 failures, 5 successes, 60s timeout
+- Relaxed: 10 failures, 2 successes, 15s timeout
+
+**Files:**
+- `src/utils/circuit_breaker.rs`
+
+---
+
+### 19. Backup & Restore System (Phase 5) ✅
+
+Disaster recovery capabilities for protocol data.
+
+**Implementation:**
+- BackupFile with metadata and records
+- SHA256 checksum verification
+- Multiple data types (CDPs, Vault, Balances, StabilityPool, Prices, Config, Events, Governance)
+- BackupManager with automatic scheduling
+- Configurable retention (max backups)
+- Backup verification and integrity checking
+
+**Features:**
+- Binary backup format with magic bytes
+- Backup statistics (count, size, oldest/newest)
+- Auto-cleanup of old backups
+- Block-height based scheduling
+
+**Files:**
+- `src/storage/backup.rs`
+
+---
+
 ## Future Phases
 
 ### Phase 6: Testnet Deployment
