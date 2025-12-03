@@ -50,6 +50,7 @@ pub mod governance;
 pub mod liquidation;
 pub mod oracle;
 pub mod protocol;
+pub mod rpc;
 pub mod spells;
 pub mod storage;
 pub mod utils;
