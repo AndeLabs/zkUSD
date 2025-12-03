@@ -199,22 +199,145 @@ Full integration with BitcoinOS Charms token standard.
 
 ---
 
+### 13. On-Chain Governance (Phase 5) ✅
+
+Complete on-chain governance system with proposals, voting, and execution.
+
+**Implementation:**
+- GovernanceSystem coordinator with config and all subsystems
+- Proposal management (ProposalId, ProposalStatus, ProposalManager)
+- Token-weighted voting system with delegation support
+- VoteTally for tracking votes (for/against/abstain)
+- Timelock queue for delayed execution
+- GovernanceExecutor for approved operations
+- ProtocolParameter enum for all governable parameters
+- GovernanceOperation enum for all possible operations
+
+**Features:**
+- Proposal creation with voting threshold
+- Delegate voting power to other addresses
+- Quorum requirement (4% of total supply default)
+- Timelock delay (2 days minimum, 30 days maximum)
+- Guardian role for emergency actions
+- Comprehensive test coverage
+
+**Files:**
+- `src/governance/mod.rs` (main coordinator)
+- `src/governance/proposal.rs` (proposal management)
+- `src/governance/voting.rs` (voting system)
+- `src/governance/timelock.rs` (execution queue)
+- `src/governance/executor.rs` (operation execution)
+- `src/governance/parameters.rs` (protocol parameters)
+
+---
+
+### 14. Rate Limiting & DDoS Protection (Phase 5) ✅
+
+Production-grade rate limiting for RPC API protection.
+
+**Implementation:**
+- Token bucket algorithm with configurable rates
+- Per-IP rate limiting
+- Per-API-key rate limiting with configurable quotas
+- IP whitelist for trusted sources
+- IP blacklist for known attackers
+- Global connection limiting
+- Burst allowance for temporary spikes
+- Statistics and monitoring
+
+**Configuration:**
+- Default: 100 req/sec per IP, 1000 req/sec per API key
+- Whitelist bypass for operators
+- Cleanup interval for stale entries
+- Configurable burst allowance
+
+**Files:**
+- `src/rpc/mod.rs` (module root)
+- `src/rpc/rate_limiter.rs` (rate limiting logic)
+- `src/rpc/middleware.rs` (Axum middleware, feature-gated)
+
+---
+
+### 15. Dynamic Fee System (Phase 5) ✅
+
+Dynamic fees that adjust based on protocol utilization and market conditions.
+
+**Implementation:**
+- Base rate with time decay (decays 1% per 12 hours of inactivity)
+- Utilization-based fee premium (up to 5x at high utilization)
+- Separate borrowing and redemption fee calculations
+- Fee floor (0.5%) and ceiling (5%) for borrowing
+- Redemption fee decay based on time since last redemption
+- Fee statistics tracking (total collected, fee counts, averages)
+- Configurable parameters for all fee calculations
+
+**Features:**
+- `calculate_borrowing_fee()` - Based on utilization and base rate
+- `calculate_redemption_fee()` - Based on redemption volume and time
+- `decay_base_rate()` - Automatic rate decay over time
+- `record_borrowing()` / `record_redemption()` - Activity tracking
+
+**Files:**
+- `src/core/fees.rs` (fee calculator)
+- `src/core/mod.rs` (module integration)
+
+---
+
+### 16. Monitoring & Alerting System (Phase 5) ✅
+
+Comprehensive protocol monitoring with alerting and health scoring.
+
+**Metrics Collection:**
+- MetricType enum (25+ protocol metrics)
+- MetricTimeSeries for historical tracking
+- MetricsCollector for aggregation
+- Counter and Gauge atomic metric types
+- Rate of change calculations
+
+**Alert System:**
+- AlertSeverity (Info, Warning, Critical, Emergency)
+- AlertType for all protocol alerts
+- AlertRule with configurable conditions
+- AlertCondition (Above, Below, Equals, ChangeExceeds, RateExceeds)
+- AlertManager with default production rules
+- NotificationDispatcher for multi-channel alerts
+- Notification channels: Log, Webhook, Email, Telegram, Discord, PagerDuty
+
+**Health Scoring:**
+- HealthStatus (Healthy, Degraded, Warning, Critical, Emergency)
+- HealthComponent (Collateralization, Oracle, StabilityPool, Liquidation, Performance, Governance)
+- ComponentScore with weighted factors
+- HealthChecker for computing overall health
+- HealthReport with recommendations
+- Auto-resolve for transient alerts
+
+**Files:**
+- `src/monitoring/mod.rs` (module root)
+- `src/monitoring/metrics.rs` (metrics collection)
+- `src/monitoring/alerts.rs` (alerting system)
+- `src/monitoring/health.rs` (health scoring)
+
+---
+
 ## Future Phases
 
-### Phase 5: Testnet Deployment
-- Testnet deployment
+### Phase 6: Testnet Deployment
+- Testnet deployment on BitcoinOS
 - Cross-contract calls
-- Integration testing
+- Integration testing with real Bitcoin testnet
+- Performance benchmarking
 
-### Phase 6: Security & Audit
-- Security audit
+### Phase 7: Security & Audit
+- Security audit by third party
 - Formal verification of critical paths
 - Bug bounty program
+- Penetration testing
 
-### Phase 7: Mainnet
+### Phase 8: Mainnet
 - Mainnet deployment
 - Liquidity bootstrapping
-- Governance setup
+- Governance activation
+- Monitoring dashboard
 
 ---
 
