@@ -104,6 +104,198 @@ impl TransferParams {
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// CDP OPERATION PARAMETERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Open CDP parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OpenCDPParams {
+    /// Initial collateral in sats
+    pub collateral_sats: u64,
+    /// Initial debt to mint in cents (optional)
+    pub initial_debt_cents: u64,
+    /// UTXO txid containing the collateral
+    pub utxo_txid: [u8; 32],
+    /// UTXO output index
+    pub utxo_vout: u32,
+}
+
+impl OpenCDPParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Close CDP parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CloseCDPParams {
+    /// CDP ID to close
+    pub cdp_id: [u8; 32],
+}
+
+impl CloseCDPParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Deposit collateral parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DepositCollateralParams {
+    /// CDP ID
+    pub cdp_id: [u8; 32],
+    /// Amount to deposit in sats
+    pub amount_sats: u64,
+    /// UTXO txid containing the collateral
+    pub utxo_txid: [u8; 32],
+    /// UTXO output index
+    pub utxo_vout: u32,
+}
+
+impl DepositCollateralParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Withdraw collateral parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WithdrawCollateralParams {
+    /// CDP ID
+    pub cdp_id: [u8; 32],
+    /// Amount to withdraw in sats
+    pub amount_sats: u64,
+    /// Destination address (script pubkey)
+    pub destination: Vec<u8>,
+}
+
+impl WithdrawCollateralParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Mint debt parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MintDebtParams {
+    /// CDP ID
+    pub cdp_id: [u8; 32],
+    /// Amount to mint in cents
+    pub amount_cents: u64,
+}
+
+impl MintDebtParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Repay debt parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RepayDebtParams {
+    /// CDP ID
+    pub cdp_id: [u8; 32],
+    /// Amount to repay in cents
+    pub amount_cents: u64,
+}
+
+impl RepayDebtParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LIQUIDATION PARAMETERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Liquidate CDP parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LiquidateParams {
+    /// CDP ID to liquidate
+    pub cdp_id: [u8; 32],
+    /// Maximum debt to liquidate (cents)
+    pub max_debt_cents: u64,
+}
+
+impl LiquidateParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Redeem zkUSD parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RedeemParams {
+    /// Amount of zkUSD to redeem (cents)
+    pub amount_cents: u64,
+    /// Maximum fee willing to pay (basis points)
+    pub max_fee_bps: u64,
+    /// Destination for BTC (script pubkey)
+    pub destination: Vec<u8>,
+}
+
+impl RedeemParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STABILITY POOL PARAMETERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// Stability pool deposit parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StabilityDepositParams {
+    /// Amount to deposit (cents)
+    pub amount_cents: u64,
+}
+
+impl StabilityDepositParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Stability pool withdraw parameters
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StabilityWithdrawParams {
+    /// Amount to withdraw (cents), 0 for all
+    pub amount_cents: u64,
+}
+
+impl StabilityWithdrawParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
+/// Claim gains parameters (empty, but included for consistency)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClaimGainsParams {
+    /// Destination for BTC gains (script pubkey)
+    pub destination: Vec<u8>,
+}
+
+impl ClaimGainsParams {
+    pub fn encode(&self) -> Vec<u8> { bincode::serialize(self).unwrap_or_default() }
+    pub fn decode(data: &[u8]) -> Result<Self> {
+        bincode::deserialize(data).map_err(|e| Error::Serialization(e.to_string()))
+    }
+}
+
 /// Spell result
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpellResult {
@@ -141,8 +333,62 @@ impl SpellBuilder {
     pub fn nonce(mut self, nonce: u64) -> Self { self.nonce = nonce; self }
     pub fn deadline(mut self, deadline: u64) -> Self { self.deadline = deadline; self }
 
+    // Token operations
     pub fn transfer(to: PublicKey, amount: u64) -> Self {
         Self::new(ZkUSDSpellType::Transfer).data(TransferParams { to, amount }.encode())
+    }
+
+    // CDP operations
+    pub fn open_cdp(collateral_sats: u64, initial_debt_cents: u64, utxo_txid: [u8; 32], utxo_vout: u32) -> Self {
+        Self::new(ZkUSDSpellType::OpenCDP).data(
+            OpenCDPParams { collateral_sats, initial_debt_cents, utxo_txid, utxo_vout }.encode()
+        )
+    }
+
+    pub fn close_cdp(cdp_id: [u8; 32]) -> Self {
+        Self::new(ZkUSDSpellType::CloseCDP).data(CloseCDPParams { cdp_id }.encode())
+    }
+
+    pub fn deposit_collateral(cdp_id: [u8; 32], amount_sats: u64, utxo_txid: [u8; 32], utxo_vout: u32) -> Self {
+        Self::new(ZkUSDSpellType::DepositCollateral).data(
+            DepositCollateralParams { cdp_id, amount_sats, utxo_txid, utxo_vout }.encode()
+        )
+    }
+
+    pub fn withdraw_collateral(cdp_id: [u8; 32], amount_sats: u64, destination: Vec<u8>) -> Self {
+        Self::new(ZkUSDSpellType::WithdrawCollateral).data(
+            WithdrawCollateralParams { cdp_id, amount_sats, destination }.encode()
+        )
+    }
+
+    pub fn mint_debt(cdp_id: [u8; 32], amount_cents: u64) -> Self {
+        Self::new(ZkUSDSpellType::MintDebt).data(MintDebtParams { cdp_id, amount_cents }.encode())
+    }
+
+    pub fn repay_debt(cdp_id: [u8; 32], amount_cents: u64) -> Self {
+        Self::new(ZkUSDSpellType::RepayDebt).data(RepayDebtParams { cdp_id, amount_cents }.encode())
+    }
+
+    // Liquidation operations
+    pub fn liquidate(cdp_id: [u8; 32], max_debt_cents: u64) -> Self {
+        Self::new(ZkUSDSpellType::Liquidate).data(LiquidateParams { cdp_id, max_debt_cents }.encode())
+    }
+
+    pub fn redeem(amount_cents: u64, max_fee_bps: u64, destination: Vec<u8>) -> Self {
+        Self::new(ZkUSDSpellType::Redeem).data(RedeemParams { amount_cents, max_fee_bps, destination }.encode())
+    }
+
+    // Stability pool operations
+    pub fn stability_deposit(amount_cents: u64) -> Self {
+        Self::new(ZkUSDSpellType::StabilityDeposit).data(StabilityDepositParams { amount_cents }.encode())
+    }
+
+    pub fn stability_withdraw(amount_cents: u64) -> Self {
+        Self::new(ZkUSDSpellType::StabilityWithdraw).data(StabilityWithdrawParams { amount_cents }.encode())
+    }
+
+    pub fn claim_gains(destination: Vec<u8>) -> Self {
+        Self::new(ZkUSDSpellType::ClaimGains).data(ClaimGainsParams { destination }.encode())
     }
 
     pub fn build_and_sign(self, caster: &crate::utils::crypto::KeyPair) -> CharmSpell {
