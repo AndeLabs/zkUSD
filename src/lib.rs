@@ -43,6 +43,7 @@
 
 pub mod btc;
 pub mod charms;
+pub mod cli;
 pub mod core;
 pub mod error;
 pub mod events;
