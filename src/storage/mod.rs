@@ -5,6 +5,7 @@
 //! - Token balance tracking
 //! - Protocol configuration persistence
 //! - Transaction history
+//! - Backup and restore capabilities
 //!
 //! ## Backends
 //!
@@ -31,10 +32,12 @@
 //! ```
 
 pub mod backend;
+pub mod backup;
 pub mod rocks;
 pub mod state;
 
 pub use backend::*;
+pub use backup::*;
 pub use rocks::{RocksConfig, BatchOperation, column_families};
 #[cfg(feature = "rocksdb-storage")]
 pub use rocks::RocksStore;
