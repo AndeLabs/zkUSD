@@ -48,6 +48,7 @@ pub mod error;
 pub mod events;
 pub mod governance;
 pub mod liquidation;
+pub mod monitoring;
 pub mod oracle;
 pub mod protocol;
 pub mod rpc;
